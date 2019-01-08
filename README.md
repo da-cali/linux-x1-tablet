@@ -40,7 +40,7 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
 
 * Instructions and patch file taken from mr-sour's gist: https://gist.github.com/mr-sour/e6e4f462dff2334aad84b6edd5181c09
 
-Patch the bios:
+Patch the DSDT:
 
 0. Reboot, and enter your BIOS. Go to Config, then Thunderbolt (TM) 3, and set Thunerbolt BIOS Assist Mode to "Enabled".
 1. Install iasl (and git):
