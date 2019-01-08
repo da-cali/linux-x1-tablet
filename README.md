@@ -2,7 +2,7 @@
 
 Linux running on the Thinkpad X1 Tablet 3rd generation.
 
-#### Working out of the box
+##### Working out of the box
 
 * Keyboard (and backlight)
 * Docking/undocking tablet and keyboard
@@ -20,13 +20,13 @@ Linux running on the Thinkpad X1 Tablet 3rd generation.
 * Sensors
 * Battery readings
 
-#### Working with tweaks (see bellow)
+##### Working with tweaks (see bellow)
 
-* Volume buttons
-* S3 sleep
-* Trackpoint and trackpad buttons
+* Volume buttons (Updating BIOS)
+* S3 sleep (Patching DSDT)
+* Trackpoint and trackpad buttons (Patching and compling kernel)
 
-#### Not working
+##### Not working
 
 * Back camera
 * Fingerprint reader
@@ -38,9 +38,11 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
 
 ### S3 sleep
 
-Patch the bios (Instructions and patch file taken from mr. sour's gist):
+* Instructions and patch file taken from mr-sour's gist: https://gist.github.com/mr-sour/e6e4f462dff2334aad84b6edd5181c09
 
-0. Reboot, and enter your BIOS. Go to Config - Thunderbolt (TM) 3 and set Thunerbolt BIOS Assist Mode to Enabled.
+Patch the bios:
+
+0. Reboot, and enter your BIOS. Go to Config, then Thunderbolt (TM) 3, and set Thunerbolt BIOS Assist Mode to "Enabled".
 1. Install iasl (and git):
   ```
   sudo dnf install acpica-tools git
@@ -55,7 +57,7 @@ Patch the bios (Instructions and patch file taken from mr. sour's gist):
   ```
 4. Get a dump of your ACPI DSDT table:
   ```
-  cat /sys/firmware/acpi/tables/DSDT > dsdt.aml
+  sudo cat /sys/firmware/acpi/tables/DSDT > dsdt.aml
   ```
 5. Decompile the dump, which will generate a .dsl source based on the .aml ACPI machine language dump:
   ```
@@ -72,34 +74,11 @@ Patch the bios (Instructions and patch file taken from mr. sour's gist):
   ```
 9. Move the compiled patch to your boot folder:
   ```
-  cp dsdt.aml /boot
+  sudo cp dsdt.aml /boot
   ```
-10. Create a custom acpi loader for grub:
+10. Copy the custom acpi loader to /etc/grub.d:
   ```
-  cat <<+ > /etc/grub.d/01_acpi
-  #! /bin/sh -e
-
-  # Uncomment to load custom ACPI table
-  GRUB_CUSTOM_ACPI="/boot/dsdt.aml"
-
-  # DON'T MODIFY ANYTHING BELOW THIS LINE!
-
-  prefix=/usr
-  exec_prefix=\${prefix}
-  datadir=\${exec_prefix}/share
-
-  . \${datadir}/grub/grub-mkconfig_lib
-
-  # Load custom ACPI table
-  if [ x\${GRUB_CUSTOM_ACPI} != x ] && [ -f \${GRUB_CUSTOM_ACPI} ] \\
-          && is_path_readable_by_grub \${GRUB_CUSTOM_ACPI}; then
-      echo "Found custom ACPI table: \${GRUB_CUSTOM_ACPI}" >&2
-      prepare_grub_to_access_device \`\${grub_probe} --target=device \$ {GRUB_CUSTOM_ACPI}\` | sed -e "s/^/ /"
-      cat << EOF
-  acpi (\\\$root)\`make_system_path_relative_to_its_root \$ {GRUB_CUSTOM_ACPI}\`
-  EOF
-  fi
-  +
+  sudo cp 01_acpi /etc/grub.d
   ```
 11. Make it executable:
   ```
@@ -109,7 +88,7 @@ Patch the bios (Instructions and patch file taken from mr. sour's gist):
   ```
   GRUB_CMDLINE_LINUX_DEFAULT="quiet mem_sleep_default=deep"
   ```
-13. Regenerate your grub file:
+13. Update grub:
   ##### Fedora/REHL 
   ```
   sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
@@ -118,8 +97,9 @@ Patch the bios (Instructions and patch file taken from mr. sour's gist):
   ```
   sudo update-grub
   ```
+* If the line "Found custom ACPI table: /boot/dsdt.aml" does not show up, update grub again.
 
-Reboot the machine and check that the patch is working by entering "cat /sys/power/mem_sleep" in the command line and confirming the ouput is "s2idle [deep]" (with the brackets around "deep").
+14. Reboot the machine and confirm that the patch is working by entering "cat /sys/power/mem_sleep" in the command line and check that the ouput is "s2idle [deep]" (with the brackets around "deep").
 
 ### Trackpoint and trackpad buttons
 
@@ -163,4 +143,4 @@ Patch and compile the kernel from source:
 
 ### NOTES
 
-* Do not install TLP! It can cause slowdowns, laggy performance, and occasional hangs! You have been warned.
+* Powertop and thermald greatly improve battery life, consider installing and setting up these tools as well. 
