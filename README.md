@@ -2,7 +2,7 @@
 
 Linux running on the Thinkpad X1 Tablet 3rd generation.
 
-##### Working out of the box
+#### Working out of the box
 
 * Keyboard (and backlight)
 * Docking/undocking tablet and keyboard
@@ -20,13 +20,13 @@ Linux running on the Thinkpad X1 Tablet 3rd generation.
 * Sensors
 * Battery readings
 
-##### Working with tweaks (see bellow)
+#### Working with tweaks (see bellow)
 
 * Volume buttons (Updating BIOS)
 * S3 sleep (Patching DSDT)
 * Trackpoint and trackpad buttons (Patching and compling kernel)
 
-##### Not working
+#### Not working
 
 * Back camera
 * Fingerprint reader
@@ -40,7 +40,7 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
 
 * Instructions and patch file taken from mr-sour's gist: https://gist.github.com/mr-sour/e6e4f462dff2334aad84b6edd5181c09
 
-Patch the DSDT:
+#### Patch the DSDT:
 
 0. Reboot, and enter your BIOS. Go to Config, then Thunderbolt (TM) 3, and set Thunerbolt BIOS Assist Mode to "Enabled".
 1. Install iasl (and git):
@@ -89,31 +89,28 @@ Patch the DSDT:
   GRUB_CMDLINE_LINUX_DEFAULT="quiet mem_sleep_default=deep"
   ```
 13. Update grub:
-  ##### Fedora/REHL 
+  * Fedora/REHL: 
   ```
   sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
   ```  
-  ##### Ubuntu
+  * Ubuntu:
   ```
   sudo update-grub
   ```
-* If the line "Found custom ACPI table: /boot/dsdt.aml" does not show up, update grub again.
+* If the line "Found custom ACPI table: /boot/dsdt.aml" line does not show up, update grub again.
 
-14. Reboot the machine and confirm that the patch is working by entering "cat /sys/power/mem_sleep" in the command line and check that the ouput is "s2idle [deep]" (with the brackets around "deep").
+14. Reboot the machine and confirm that the patch is working by entering "cat /sys/power/mem_sleep" in the command line and getting back "s2idle [deep]" (with the brackets around "deep").
 
 ### Trackpoint and trackpad buttons
 
-Patch and compile the kernel from source:
+#### Patch and compile the kernel from source:
 
-0. (Prep) Install the required packages for compiling the kernel:
+0. Install the required packages for compiling the kernel:
   ```
-  sudo apt install git curl wget sed
+  sudo dnf install git curl sed elfutils-devel openssl-devel perl-devel perl-generators pesign ncurses-devel
   ```
   ```
   sudo dnf groupinstall "Development Tools" "C Development Tools and Libraries"
-  ```
-  ```
-  sudo dnf install elfutils-devel openssl-devel perl-devel   perl-generators pesign ncurses-devel
   ```
 1. (From the /linux-x1-tablet folder) Clone the mainline stable kernel repo:
   ```
@@ -152,4 +149,4 @@ Patch and compile the kernel from source:
 ### NOTES
 
 * Powertop and thermald greatly improve battery life, I recommend installing and setting up these tools as well. 
-* As far as I know there is no desktop with better tablet support (gestures, autorotation, UI friendliness, etc) than Gnome under wayland. Even if you dislike Gnome, consider giving it a chance on this particular device.
+* As far as I know there is no desktop with better tablet support (gestures, autorotation, UI friendliness, etc) than Gnome under Wayland. Even if you dislike Gnome, consider using it for this particular device.
