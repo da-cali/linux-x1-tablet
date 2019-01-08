@@ -137,7 +137,7 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
   ```
   git checkout v4.18.x
   ```
-4. Apply the kernel patch (from the linux-surface repo):
+4. Apply the kernel patch:
   ```
   patch -p1 < ../ipts.patch
   ```
