@@ -1,8 +1,8 @@
 # Linux X1 Tablet
 
-Linux running on the X1 Tablet 3rd generation.
+Linux running on the Thinkpad X1 Tablet 3rd generation.
 
-### Working out of the box
+#### Working out of the box
 
 * Keyboard (and backlight)
 * Docking/undocking tablet and keyboard
@@ -20,13 +20,13 @@ Linux running on the X1 Tablet 3rd generation.
 * Sensors
 * Battery readings
 
-### Working with tweaks (see bellow)
+#### Working with tweaks (see bellow)
 
 * Volume buttons
 * S3 sleep
 * Trackpoint and trackpad buttons
 
-### Not working
+#### Not working
 
 * Back camera
 * Fingerprint reader
@@ -34,13 +34,13 @@ Linux running on the X1 Tablet 3rd generation.
 
 ### Volume buttons
 
-Upgrade your BIOS. Doing so fixes the Volume buttons and it is possibly necesary to make S3 suspend work.
+Upgrade your BIOS. Doing so fixes the Volume buttons and it is possibly necesary to make S3 sleep work.
 
 ### S3 sleep
 
 Reboot, enter your BIOS/UEFI. Go to Config - Thunderbolt (TM) 3 - set Thunerbolt BIOS Assist Mode to Enabled.
 
-Patch the bios (Thanks to mr. sour for the gist):
+Patch the bios (Instructions and patch file taken from mr. sour's gist):
 
 0. Install iasl (and git):
   ```
@@ -66,8 +66,61 @@ Patch the bios (Thanks to mr. sour for the gist):
   ```
   patch --verbose < x1_dsdt.patch
   ```
+6. If (Once?) the patch is rejected, look at x1_dsdt.patch and notice the lines that start with "-". These lines of code should be removed from your dsdt.dsl -and replaced with another one in the case of the DefinitionBlock line. Open your dsdt.dsl and A) make sure that the hex number at the end of the first non-commented line (DefinitionBlock...) is 0x00000001; and B) delete the "One" lines if necessary. Save the changes.
+7. Recompile your patched version of the .dsl source:
+  ```
+  iasl -ve -tc dsdt.dsl
+  ```
+8. Move the compiled patch to your boot folder:
+  ```
+  cp dsdt.aml /boot
+  ```
+9. Create a custom acpi loader for grub
+  ```
+  cat <<+ > /etc/grub.d/01_acpi
+  #! /bin/sh -e
 
+  # Uncomment to load custom ACPI table
+  GRUB_CUSTOM_ACPI="/boot/dsdt.aml"
 
+  # DON'T MODIFY ANYTHING BELOW THIS LINE!
+
+  prefix=/usr
+  exec_prefix=\${prefix}
+  datadir=\${exec_prefix}/share
+
+  . \${datadir}/grub/grub-mkconfig_lib
+
+  # Load custom ACPI table
+  if [ x\${GRUB_CUSTOM_ACPI} != x ] && [ -f \${GRUB_CUSTOM_ACPI} ] \\
+          && is_path_readable_by_grub \${GRUB_CUSTOM_ACPI}; then
+      echo "Found custom ACPI table: \${GRUB_CUSTOM_ACPI}" >&2
+      prepare_grub_to_access_device \`\${grub_probe} --target=device \$ {GRUB_CUSTOM_ACPI}\` | sed -e "s/^/ /"
+      cat << EOF
+  acpi (\\\$root)\`make_system_path_relative_to_its_root \$ {GRUB_CUSTOM_ACPI}\`
+  EOF
+  fi
+  +
+  ```
+10. Make it executable:
+  ```
+  sudo chmod 0755 /etc/grub.d/01_acpi
+  ```
+11. Open /etc/default/grub and add "mem_sleep_default=deep" to the GRUB_CMDLINE_LINUX so that it looks like this:
+  ```
+  GRUB_CMDLINE_LINUX_DEFAULT="quiet mem_sleep_default=deep"
+  ```
+12. Regenerate your grub file:
+  # Fedora/REHL 
+  ```
+  grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
+  ```  
+  # Ubuntu
+  ```
+  update-grub
+  ```
+
+Reboot the machine and check that the patch is working by entering "cat /sys/power/mem_sleep" in the command line and confirming the ouput is "s2idle [deep]" (with the brackets around "deep").
 
 ### Trackpoint and trackpad buttons
 
