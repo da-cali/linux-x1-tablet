@@ -139,6 +139,7 @@ Patch and compile the kernel from source:
   ```
   make -j `getconf _NPROCESSORS_ONLN` bzImage; make -j `getconf _NPROCESSORS_ONLN` modules
   ```
+  * Type "m" when prompted "Intel Precise Touch & Stylus (INTEL_IPTS) [N/m/y/?] (NEW)"
 7. Install the kernel and headers:
   ```
   sudo make -j `getconf _NPROCESSORS_ONLN` modules_install
