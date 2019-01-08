@@ -67,7 +67,7 @@ Patch the bios:
   ```
   patch --verbose < x1_dsdt.patch
   ```
-7. If (Once?) the patch is rejected, look at x1_dsdt.patch and notice the lines that begin with "-". These lines of code should be removed from your dsdt.dsl (and replaced with another one in the case of the DefinitionBlock line). Open your dsdt.dsl and A) make sure that the hex number at the end of the first non-commented line (DefinitionBlock...) is "0x00000001"; and B) delete the "One" lines if necessary. Save the changes.
+7. If (Once?) the patch is rejected, look at x1_dsdt.patch and notice the lines that begin with "-". These lines of code should be removed from your dsdt.dsl (and replaced with another one in the case of the DefinitionBlock line). Open your dsdt.dsl and a) make sure that the hex number at the end of the first non-commented line (DefinitionBlock...) is "0x00000001"; and b) delete the "One" lines if necessary. Save the changes.
 8. Recompile your patched version of the .dsl source:
   ```
   iasl -ve -tc dsdt.dsl
@@ -108,12 +108,16 @@ Patch and compile the kernel from source:
 0. (Prep) Install the required packages for compiling the kernel:
   ```
   sudo apt install git curl wget sed
+  ```
+  ```
   sudo dnf groupinstall "Development Tools" "C Development Tools and Libraries"
+  ```
+  ```
   sudo dnf install elfutils-devel openssl-devel perl-devel   perl-generators pesign ncurses-devel
   ```
-1. Clone the mainline stable kernel repo:
+1. (From the /linux-x1-tablet folder) Clone the mainline stable kernel repo:
   ```
-  git clone git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git ~/linux-stable
+  git clone git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
   ```
 2. Go into the linux-stable directory:
   ```
@@ -121,26 +125,30 @@ Patch and compile the kernel from source:
   ```
 3. Checkout the version of the kernel you wish to target (replacing with your target version):
   ```
-  git checkout v4.y.z
+  git checkout v4.18.x
   ```
 4. Apply the kernel patches from the linux-surface repo (this one, and assuming you cloned it to ~/linux-surface):
   ```
-  for i in ~/linux-surface/patches/[VERSION]/*.patch; do patch -p1 < $i; done
+  for i in ../linux-surface/patches/4.18/*.patch; do patch -p1 < $i; done
   ```
-5. Use config for kernel series (may need to manually change for your distro):
+5. Copy the current kernel configuration of your distribution:
   ```
-  cp ~/linux-surface/configs/[VERSION]/config .config
+  cp -v /boot/config-$(uname -r) .config
   ```
-6. Compile the kernel and headers (for ubuntu, refer to the build guide for your distro):
+6. Compile the kernel and headers (this might take around one hour depending on your hardware):
   ```
-  make -j `getconf _NPROCESSORS_ONLN` deb-pkg LOCALVERSION=-linux-surface
+  make -j `getconf _NPROCESSORS_ONLN` bzImage; make -j `getconf _NPROCESSORS_ONLN` modules
   ```
-7. Install the headers, kernel and libc-dev:
+7. Install the kernel and headers:
   ```
-  sudo dpkg -i linux-headers-[VERSION].deb linux-image-[VERSION].deb linux-libc-dev-[VERSION].deb
+  sudo make -j `getconf _NPROCESSORS_ONLN` modules_install
+  ```
+  ```
+  sudo make -j `getconf _NPROCESSORS_ONLN` install
   ```
 
 
 ### NOTES
 
-* Powertop and thermald greatly improve battery life, consider installing and setting up these tools as well. 
+* Powertop and thermald greatly improve battery life, I recommend installing and setting up these tools as well. 
+* As far as I know there is no desktop with better tablet support (gestures, autorotation, UI friendliness, etc) than Gnome under wayland. Even if you dislike Gnome, consider giving it a chance on this particular device.
