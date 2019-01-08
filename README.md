@@ -129,7 +129,7 @@ Patch and compile the kernel from source:
   ```
 4. Apply the kernel patches from the linux-surface repo (this one, and assuming you cloned it to ~/linux-surface):
   ```
-  for i in ../linux-surface/patches/4.18/*.patch; do patch -p1 < $i; done
+  for i in ../patches/4.18/*.patch; do patch -p1 < $i; done
   ```
 5. Copy the current kernel configuration of your distribution:
   ```
