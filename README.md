@@ -34,48 +34,47 @@ Linux running on the Thinkpad X1 Tablet 3rd generation.
 
 ### Volume buttons
 
-Upgrade your BIOS. Doing so fixes the Volume buttons and it is possibly necesary to make S3 sleep work.
+Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary to make S3 sleep work.
 
 ### S3 sleep
 
-Reboot, enter your BIOS/UEFI. Go to Config - Thunderbolt (TM) 3 - set Thunerbolt BIOS Assist Mode to Enabled.
-
 Patch the bios (Instructions and patch file taken from mr. sour's gist):
 
-0. Install iasl (and git):
+0. Reboot, and enter your BIOS. Go to Config - Thunderbolt (TM) 3 and set Thunerbolt BIOS Assist Mode to Enabled.
+1. Install iasl (and git):
   ```
   sudo dnf install acpica-tools git
   ```
-0. Clone repository:
+2. Clone repository:
   ```
   git clone https://github.com/da-cali/linux-x1-tablet
   ```
-1. Open folder:
+3. Open folder:
   ```
   cd linux-x1-tablet
   ```
-2. Get a dump of your ACPI DSDT table:
+4. Get a dump of your ACPI DSDT table:
   ```
   cat /sys/firmware/acpi/tables/DSDT > dsdt.aml
   ```
-4. Decompile the dump, which will generate a .dsl source based on the .aml ACPI machine language dump:
+5. Decompile the dump, which will generate a .dsl source based on the .aml ACPI machine language dump:
   ```
   iasl -d dsdt.aml
   ```
-5. Apply the patch to dsdt.dsl:
+6. Apply the patch to dsdt.dsl:
   ```
   patch --verbose < x1_dsdt.patch
   ```
-6. If (Once?) the patch is rejected, look at x1_dsdt.patch and notice the lines that start with "-". These lines of code should be removed from your dsdt.dsl -and replaced with another one in the case of the DefinitionBlock line. Open your dsdt.dsl and A) make sure that the hex number at the end of the first non-commented line (DefinitionBlock...) is 0x00000001; and B) delete the "One" lines if necessary. Save the changes.
-7. Recompile your patched version of the .dsl source:
+7. If (Once?) the patch is rejected, look at x1_dsdt.patch and notice the lines that begin with "-". These lines of code should be removed from your dsdt.dsl (and replaced with another one in the case of the DefinitionBlock line). Open your dsdt.dsl and A) make sure that the hex number at the end of the first non-commented line (DefinitionBlock...) is "0x00000001"; and B) delete the "One" lines if necessary. Save the changes.
+8. Recompile your patched version of the .dsl source:
   ```
   iasl -ve -tc dsdt.dsl
   ```
-8. Move the compiled patch to your boot folder:
+9. Move the compiled patch to your boot folder:
   ```
   cp dsdt.aml /boot
   ```
-9. Create a custom acpi loader for grub
+10. Create a custom acpi loader for grub:
   ```
   cat <<+ > /etc/grub.d/01_acpi
   #! /bin/sh -e
@@ -102,22 +101,22 @@ Patch the bios (Instructions and patch file taken from mr. sour's gist):
   fi
   +
   ```
-10. Make it executable:
+11. Make it executable:
   ```
   sudo chmod 0755 /etc/grub.d/01_acpi
   ```
-11. Open /etc/default/grub and add "mem_sleep_default=deep" to the GRUB_CMDLINE_LINUX so that it looks like this:
+12. Open /etc/default/grub and add "mem_sleep_default=deep" to the GRUB_CMDLINE_LINUX so that it looks like this:
   ```
   GRUB_CMDLINE_LINUX_DEFAULT="quiet mem_sleep_default=deep"
   ```
-12. Regenerate your grub file:
-  # Fedora/REHL 
+13. Regenerate your grub file:
+  ##### Fedora/REHL 
   ```
-  grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
+  sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
   ```  
-  # Ubuntu
+  ##### Ubuntu
   ```
-  update-grub
+  sudo update-grub
   ```
 
 Reboot the machine and check that the patch is working by entering "cat /sys/power/mem_sleep" in the command line and confirming the ouput is "s2idle [deep]" (with the brackets around "deep").
