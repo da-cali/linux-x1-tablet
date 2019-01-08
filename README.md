@@ -1,82 +1,83 @@
-# Linux Surface
+# Linux X1 Tablet
 
-Linux running on the Surface Book, Surface Book 2, Surface Go, Surface Pro 3, Surface Pro 4, Surface Pro 2017, Surface Pro 6, Surface Laptop and Surface Laptop 2. Follow the instructions below to install the latest kernel and config files.
+Linux running on the X1 Tablet 3rd generation.
 
-### What's Working
+### Working out of the box
 
 * Keyboard (and backlight)
-* Touchpad
-* 2D/3D Acceleration
+* Docking/undocking tablet and keyboard
+* 2D/3D acceleration
+* Trackpad
 * Touchscreen
 * Pen
 * WiFi
 * Bluetooth
 * Speakers
-* Power Button
-* Volume Buttons
-* SD Card Reader
-* Cameras (partial support, disabled for now)
+* Power button
+* SD card reader
+* Front camera
 * Hibernate
-* Sensors (accelerometer, gyroscope, ambient light sensor)
-* Battery Readings (not yet working for SB2/SP2017)
-* Docking/Undocking Tablet and Keyboard
-* Surface Docks
-* DisplayPort
-* USB-C (including for HDMI Out)
-* Dedicated Nvidia GPU (Surface Book 2)
+* Sensors
+* Battery readings
 
-### What's NOT Working
+### Working with tweaks (see bellow)
 
-* Dedicated Nvidia GPU (if you have a performance base on a Surface Book 1, otherwise onboard works fine)
-* Cameras (not fully supported yet)
-* Suspend (uses Connected Standby which is not supported yet)
+* Volume buttons
+* S3 sleep
+* Trackpoint and trackpad buttons
 
-### Disclaimer
-* For the most part, things are tested on a Surface Book. While most things are reportedly fully working on other devices, your mileage may vary. Please look at the issues list for possible exceptions.
+### Not working
 
-### Download Pre-built Kernel and Headers
+* Back camera
+* Fingerprint reader
+* FnLock key
 
-Downloads for ubuntu based distros (other distros will need to compile from source using the included patches):
+### Volume buttons
 
-https://github.com/jakeday/linux-surface/releases
+Upgrade your BIOS. Doing so fixes the Volume buttons and it is possibly necesary to make S3 suspend work.
 
-You will need to download the image, headers and libc-dev deb files for the version you want to install.
+### S3 sleep
 
-### Instructions
+Reboot, enter your BIOS/UEFI. Go to Config - Thunderbolt (TM) 3 - set Thunerbolt BIOS Assist Mode to Enabled.
 
-0. (Prep) Install Dependencies:
+Patch the bios (Thanks to mr. sour for the gist):
+
+0. Install iasl (and git):
   ```
-   sudo apt install git curl wget sed
+  sudo dnf install acpica-tools git
   ```
-1. Clone the linux-surface repo:
+0. Clone repository:
   ```
-   git clone --depth 1 https://github.com/jakeday/linux-surface.git ~/linux-surface
+  git clone https://github.com/da-cali/linux-x1-tablet
   ```
-2. Change directory to linux-surface repo:
+1. Open folder:
   ```
-   cd ~/linux-surface
+  cd linux-x1-tablet
   ```
-3. Run setup script:
+2. Get a dump of your ACPI DSDT table:
   ```
-   sudo sh setup.sh
+  cat /sys/firmware/acpi/tables/DSDT > dsdt.aml
   ```
-4. Reboot on installed kernel.
+4. Decompile the dump, which will generate a .dsl source based on the .aml ACPI machine language dump:
+  ```
+  iasl -d dsdt.aml
+  ```
+5. Apply the patch to dsdt.dsl:
+  ```
+  patch --verbose < x1_dsdt.patch
+  ```
 
-The setup script will handle installing the latest kernel for you. You can also choose to download any version you want and install yourself:
-Install the headers, kernel and libc-dev (make sure you cd to your download location first):
-  ```
-  sudo dpkg -i linux-headers-[VERSION].deb linux-image-[VERSION].deb linux-libc-dev-[VERSION].deb
-  ```
 
-### Compiling the Kernel from Source
 
-#### For Debian-Based Systems
+### Trackpoint and trackpad buttons
 
-If you don't want to use the pre-built kernel and headers, you can compile the kernel yourself following these steps:
+Patch and compile the kernel from source:
 
 0. (Prep) Install the required packages for compiling the kernel:
   ```
-  sudo apt install build-essential binutils-dev libncurses5-dev libssl-dev ccache bison flex libelf-dev
+  sudo apt install git curl wget sed
+  sudo dnf groupinstall "Development Tools" "C Development Tools and Libraries"
+  sudo dnf install elfutils-devel openssl-devel perl-devel   perl-generators pesign ncurses-devel
   ```
 1. Clone the mainline stable kernel repo:
   ```
@@ -107,21 +108,7 @@ If you don't want to use the pre-built kernel and headers, you can compile the k
   sudo dpkg -i linux-headers-[VERSION].deb linux-image-[VERSION].deb linux-libc-dev-[VERSION].deb
   ```
 
-#### For Arch-Based Systems
-
-Have a look at [this](https://github.com/dmhacker/arch-linux-surface) repository.
-
-### Signing the kernel for Secure Boot
-
-Please consult the [SIGNING.md](SIGNING.md).
 
 ### NOTES
 
-* If you are getting stuck at boot when loading the ramdisk, you need to install the Processor Microcode Firmware for Intel CPUs (usually found under Additional Drivers in Software and Updates).
 * Do not install TLP! It can cause slowdowns, laggy performance, and occasional hangs! You have been warned.
-
-### Donations Appreciated!
-
-PayPal: https://www.paypal.me/jakeday42
-
-Bitcoin: 1AH7ByeJBjMoAwsgi9oeNvVLmZHvGoQg68
