@@ -124,11 +124,11 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
   ```
   git checkout v4.18.x
   ```
-4. Apply the kernel patches from the linux-surface repo (this one, and assuming you cloned it to ~/linux-surface):
+4. Apply the kernel patch (from the linux-surface repo):
   ```
-  for i in ../patches/4.18/*.patch; do patch -p1 < $i; done
+  patch -p1 < ../ipts.patch
   ```
-5. Copy the current kernel configuration of your distribution:
+5. Obtain the current kernel configuration of your distribution:
   ```
   cp -v /boot/config-$(uname -r) .config
   ```
@@ -144,6 +144,16 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
   ```
   sudo make -j `getconf _NPROCESSORS_ONLN` install
   ```
+8. Update grub:
+  * Fedora/REHL: 
+  ```
+  sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
+  ```  
+  * Ubuntu:
+  ```
+  sudo update-grub
+  ```
+9. Reboot from the new kernel.
 
 
 ### NOTES
