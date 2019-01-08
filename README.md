@@ -16,6 +16,7 @@ Linux running on the Thinkpad X1 Tablet 3rd generation.
 * Power button
 * SD card reader
 * Front camera
+* Suspend (not S3)
 * Hibernate
 * Sensors
 * Battery readings
@@ -112,7 +113,7 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
   ```
   sudo dnf groupinstall "Development Tools" "C Development Tools and Libraries"
   ```
-1. (From the /linux-x1-tablet folder) Clone the mainline stable kernel repo:
+1. (From the linux-x1-tablet folder) Clone the mainline stable kernel repo:
   ```
   git clone git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
   ```
