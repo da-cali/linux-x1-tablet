@@ -78,7 +78,7 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
   ```
   iasl -ve -tc dsdt.dsl
   ```
-9. Move the compiled patch to your boot folder:
+9. If there are no errors in the previous step, move the compiled patch to your boot folder:
   ```
   sudo cp dsdt.aml /boot
   ```
@@ -169,7 +169,8 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
 9. Reboot from the new kernel.
 
 
-### NOTES
+### Notes
 
+* The custom acpi loader does not currently support dual boot with Windows, so if you install it and want to boot on Windows you will have to disable it first, and update the grub before restarting.
 * Powertop and thermald greatly improve battery life, I recommend installing and setting up these tools as well.
 * As far as I know there is no desktop with better tablet support (gestures, autorotation, UI friendliness, etc) than Gnome under Wayland. Even if you dislike Gnome, consider using it for this particular device.
