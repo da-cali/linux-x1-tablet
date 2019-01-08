@@ -39,14 +39,19 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
 
 ### S3 sleep
 
-* Instructions and patch file taken from mr-sour's gist: https://gist.github.com/mr-sour/e6e4f462dff2334aad84b6edd5181c09
+* Thanks to mr-sour's for his gist: https://gist.github.com/mr-sour/e6e4f462dff2334aad84b6edd5181c09
 
 #### Patch the DSDT:
 
 0. Reboot, and enter your BIOS. Go to Config, then Thunderbolt (TM) 3, and set Thunerbolt BIOS Assist Mode to "Enabled".
-1. Install iasl (and git):
+1. Install iasl, patch and git:
+  * Fedora/REHL:
   ```
-  sudo dnf install acpica-tools git
+  sudo dnf install acpica-tools patch git
+  ```
+  * Ubuntu:
+  ```
+  sudo dnf install iasl patch git
   ```
 2. Clone repository:
   ```
@@ -98,20 +103,27 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
   ```
   sudo update-grub
   ```
-* If the line "Found custom ACPI table: /boot/dsdt.aml" line does not show up, update grub again.
+  * If the line "Found custom ACPI table: /boot/dsdt.aml" line does not show up, update grub again.
 
 14. Reboot the machine and confirm that the patch is working by entering "cat /sys/power/mem_sleep" in the command line and getting back "s2idle [deep]" (with the brackets around "deep").
 
 ### Trackpoint and trackpad buttons
 
+* Thanks to jakeday for the patch
+
 #### Patch and compile the kernel from source:
 
 0. Install the required packages for compiling the kernel:
+  * Fedora/REHL
   ```
   sudo dnf install git curl sed elfutils-devel openssl-devel perl-devel perl-generators pesign ncurses-devel
   ```
   ```
   sudo dnf groupinstall "Development Tools" "C Development Tools and Libraries"
+  ```
+  * Ubuntu:
+  ```
+  sudo apt install git curl sed build-essential binutils-dev libncurses5-dev libssl-dev ccache bison flex libelf-dev
   ```
 1. (From the linux-x1-tablet folder) Clone the mainline stable kernel repo:
   ```
@@ -159,5 +171,5 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
 
 ### NOTES
 
-* Powertop and thermald greatly improve battery life, I recommend installing and setting up these tools as well. 
+* Powertop and thermald greatly improve battery life, I recommend installing and setting up these tools as well.
 * As far as I know there is no desktop with better tablet support (gestures, autorotation, UI friendliness, etc) than Gnome under Wayland. Even if you dislike Gnome, consider using it for this particular device.
