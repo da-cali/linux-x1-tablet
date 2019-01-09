@@ -55,7 +55,7 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
   ```
 2. Clone repository:
   ```
-  git clone https://github.com/da-cali/linux-x1-tablet
+  git clone --depth 1 https://github.com/da-cali/linux-x1-tablet
   ```
 3. Open folder:
   ```
