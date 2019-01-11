@@ -65,10 +65,8 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
   ```
   sudo sh s3-setup.sh
   ```
-5. Open /etc/default/grub and add "mem_sleep_default=deep" to the GRUB_CMDLINE_LINUX so that it looks (may differ) like this:
-  ```
-  GRUB_CMDLINE_LINUX="quiet mem_sleep_default=deep"
-  ```
+5. Open /etc/default/grub and add "mem_sleep_default=deep" to the GRUB_CMDLINE_LINUX line so that it looks (may differ) like this: GRUB_CMDLINE_LINUX="quiet mem_sleep_default=deep.
+
 6. Update grub:
   * Fedora/REHL: 
   ```
