@@ -73,8 +73,7 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
   ```
   patch --verbose < x1_dsdt.patch
   ```
-  If everything succeded, go to step 8, else continue to step 7.
-7. If (Once?) the patch is rejected, look at x1_dsdt.patch and notice the lines that begin with "-". These lines of code should be removed from your dsdt.dsl (and replaced with another one in the case of the DefinitionBlock line). Open your dsdt.dsl and a) make sure that the hex number at the end of the first non-commented line (DefinitionBlock...) is "0x00000001"; and b) delete the "One" lines if necessary. Save the changes.
+7. If everything succeded go to step 8, otherwise look at x1_dsdt.patch and notice the lines that begin with "-". These lines of code should be removed from your dsdt.dsl (and replaced with another one in the case of the DefinitionBlock line). Open your dsdt.dsl and a) make sure that the hex number at the end of the first non-commented line (DefinitionBlock...) is "0x00000001"; and b) delete the "One" lines if necessary. Save the changes.
 8. Recompile your patched version of the .dsl source:
   ```
   iasl -ve -tc dsdt.dsl
