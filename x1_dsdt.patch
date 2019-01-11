@@ -7,16 +7,16 @@
 -DefinitionBlock ("", "DSDT", 2, "LENOVO", "SKL     ", 0x00000000)
 +DefinitionBlock ("", "DSDT", 2, "LENOVO", "SKL     ", 0x00000001)
  {
-     External (_GPE.TBNF, MethodObj)    // 0 Arguments
      External (_PR_.BGIA, UnknownObj)
-@@ -415,9 +415,7 @@
+     External (_PR_.BGMA, UnknownObj)
+@@ -231,9 +231,7 @@
      Name (SS1, 0x00)
      Name (SS2, 0x00)
      Name (SS3, One)
 -    One
      Name (SS4, One)
 -    One
-     OperationRegion (GNVS, SystemMemory, 0x9FF4E000, 0x0771)
+     OperationRegion (GNVS, SystemMemory, 0x4FF33000, 0x0769)
      Field (GNVS, AnyAcc, Lock, Preserve)
      {
 @@ -27580,6 +27578,13 @@
