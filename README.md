@@ -65,7 +65,7 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
   ```
   sudo sh s3-setup.sh
   ```
-5. Open /etc/default/grub and add "mem_sleep_default=deep" to the GRUB_CMDLINE_LINUX line so that it looks (may differ) like this: GRUB_CMDLINE_LINUX="quiet mem_sleep_default=deep.
+5. Open /etc/default/grub and add "mem_sleep_default=deep" to the GRUB_CMDLINE_LINUX line so that it looks (may differ) like this: GRUB_CMDLINE_LINUX="quiet mem_sleep_default=deep".
 
 6. Update grub:
   * Fedora/REHL: 
@@ -76,7 +76,7 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
   ```
   sudo update-grub
   ```
-  * If the line "Found custom ACPI table: /boot/dsdt.aml" line does not show up, update grub again.
+  * If the "Found custom ACPI table: /boot/dsdt.aml" line does not show up, update grub again.
 
 7. Reboot the machine and confirm that the patch is working by entering "cat /sys/power/mem_sleep" in the command line and getting back "s2idle [deep]" (with the brackets around "deep").
 
