@@ -33,11 +33,11 @@ Linux running on the Thinkpad X1 Tablet 3rd generation.
 * Fingerprint reader
 * FnLock key
 
-### Volume buttons
+### Fix the volume buttons:
 
 Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary to make S3 sleep work.
 
-### S3 sleep
+### Enable S3 sleep:
 
 * Thanks to mr-sour's for his gist: https://gist.github.com/mr-sour/e6e4f462dff2334aad84b6edd5181c09
 
@@ -61,40 +61,15 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
   ```
   cd linux-x1-tablet
   ```
-4. Get a dump of your ACPI DSDT table:
+4. Run the S3 setup script:
   ```
-  sudo cat /sys/firmware/acpi/tables/DSDT > dsdt.aml
+  sudo sh s3-setup.sh
   ```
-5. Decompile the dump, which will generate a .dsl source based on the .aml ACPI machine language dump:
+5. Open /etc/default/grub and add "mem_sleep_default=deep" to the GRUB_CMDLINE_LINUX so that it looks (may differ) like this:
   ```
-  iasl -d dsdt.aml
+  GRUB_CMDLINE_LINUX="quiet mem_sleep_default=deep"
   ```
-6. Apply the patch to dsdt.dsl:
-  ```
-  patch --verbose < x1_dsdt.patch
-  ```
-7. If everything succeded go to step 8, otherwise look at x1_dsdt.patch and notice the lines that begin with "-". These lines of code should be removed from your dsdt.dsl (and replaced with another one in the case of the DefinitionBlock line). Open your dsdt.dsl and a) make sure that the hex number at the end of the first non-commented line (DefinitionBlock...) is "0x00000001"; and b) delete the "One" lines if necessary. Save the changes.
-8. Recompile your patched version of the .dsl source:
-  ```
-  iasl -ve -tc dsdt.dsl
-  ```
-9. If there are no errors in the previous step, move the compiled patch to your boot folder:
-  ```
-  sudo cp dsdt.aml /boot
-  ```
-10. Copy the custom acpi loader to /etc/grub.d:
-  ```
-  sudo cp 01_acpi /etc/grub.d
-  ```
-11. Make it executable:
-  ```
-  sudo chmod 0755 /etc/grub.d/01_acpi
-  ```
-12. Open /etc/default/grub and add "mem_sleep_default=deep" to the GRUB_CMDLINE_LINUX so that it looks like this:
-  ```
-  GRUB_CMDLINE_LINUX_DEFAULT="quiet mem_sleep_default=deep"
-  ```
-13. Update grub:
+6. Update grub:
   * Fedora/REHL: 
   ```
   sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
@@ -105,9 +80,9 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
   ```
   * If the line "Found custom ACPI table: /boot/dsdt.aml" line does not show up, update grub again.
 
-14. Reboot the machine and confirm that the patch is working by entering "cat /sys/power/mem_sleep" in the command line and getting back "s2idle [deep]" (with the brackets around "deep").
+7. Reboot the machine and confirm that the patch is working by entering "cat /sys/power/mem_sleep" in the command line and getting back "s2idle [deep]" (with the brackets around "deep").
 
-### Trackpoint and trackpad buttons
+### Fix the trackpoint and trackpad buttons:
 
 * Thanks to jakeday for the patch
 
