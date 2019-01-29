@@ -39,7 +39,7 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
 
 ### Enable S3 sleep:
 
-* Thanks to mr-sour's for his gist: https://gist.github.com/mr-sour/e6e4f462dff2334aad84b6edd5181c09
+* Thanks to mr-sour's for [his gist](https://gist.github.com/mr-sour/e6e4f462dff2334aad84b6edd5181c09)
 
 #### Patch the DSDT:
 
@@ -61,7 +61,7 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
   ```
   cd linux-x1-tablet
   ```
-4. Run the S3 setup script:
+4. Run the [S3 setup script](https://github.com/da-cali/linux-x1-tablet/blob/master/s3-setup.sh):
   ```
   sudo sh s3-setup.sh
   ```
