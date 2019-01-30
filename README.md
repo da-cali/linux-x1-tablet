@@ -106,9 +106,9 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
   ```
   cd ~/linux-stable
   ```
-3. Checkout the version of the kernel you wish to target (replacing with your target version):
+3. Checkout the current supported version of the kernel:
   ```
-  git checkout v4.18.x
+  git checkout v4.19.18
   ```
 4. Apply the kernel patch:
   ```
@@ -144,5 +144,4 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
 
 ### Notes
 
-* The custom acpi loader does not currently support dual boot with Windows, so if you install it and want to boot on Windows you will have to disable it first, and update the grub before restarting.
-* Powertop and thermald greatly improve battery life, I recommend installing and setting up these tools as well. 
+* The custom acpi loader does not currently support dual boot with Windows, so if you installed a kernel using this guide and want to boot on Windows you will have to disable it first, and update the grub before restarting.
