@@ -51,7 +51,7 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
   ```
   * Ubuntu:
   ```
-  sudo dnf install iasl patch git
+  sudo apt install iasl patch git
   ```
 2. Clone repository:
   ```
