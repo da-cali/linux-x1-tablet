@@ -39,7 +39,7 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
 
 ### Enable S3 sleep:
 
-* Thanks to mr-sour's for [his gist](https://gist.github.com/mr-sour/e6e4f462dff2334aad84b6edd5181c09)
+* Thanks to mr-sour for his [gist](https://gist.github.com/mr-sour/e6e4f462dff2334aad84b6edd5181c09)
 
 #### Patch the DSDT:
 
