@@ -1,0 +1,74 @@
+diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
+index 2faf5421fdd0..831617c386e6 100644
+--- a/drivers/hid/hid-multitouch.c
++++ b/drivers/hid/hid-multitouch.c
+@@ -173,6 +173,7 @@ struct mt_device {
+ static void mt_post_parse_default_settings(struct mt_device *td,
+ 					   struct mt_application *app);
+ static void mt_post_parse(struct mt_device *td, struct mt_application *app);
++static int cc_seen = 0;
+ 
+ /* classes of device behavior */
+ #define MT_CLS_DEFAULT				0x0001
+@@ -792,8 +793,11 @@ static int mt_touch_input_mapping(struct hid_device *hdev, struct hid_input *hi,
+ 			app->scantime_logical_max = field->logical_maximum;
+ 			return 1;
+ 		case HID_DG_CONTACTCOUNT:
+-			app->have_contact_count = true;
+-			app->raw_cc = &field->value[usage->usage_index];
++			if(cc_seen != 1) {
++				app->have_contact_count = true;
++				app->raw_cc = &field->value[usage->usage_index];
++				cc_seen++;
++			}
+ 			return 1;
+ 		case HID_DG_AZIMUTH:
+ 			/*
+@@ -1283,9 +1287,11 @@ static int mt_input_mapping(struct hid_device *hdev, struct hid_input *hi,
+ 	    field->application != HID_DG_TOUCHSCREEN &&
+ 	    field->application != HID_DG_PEN &&
+ 	    field->application != HID_DG_TOUCHPAD &&
++		field->application != HID_GD_MOUSE &&
+ 	    field->application != HID_GD_KEYBOARD &&
+ 	    field->application != HID_GD_SYSTEM_CONTROL &&
+ 	    field->application != HID_CP_CONSUMER_CONTROL &&
++		field->logical != HID_DG_TOUCHSCREEN &&
+ 	    field->application != HID_GD_WIRELESS_RADIO_CTLS &&
+ 	    field->application != HID_GD_SYSTEM_MULTIAXIS &&
+ 	    !(field->application == HID_VD_ASUS_CUSTOM_MEDIA_KEYS &&
+@@ -1330,6 +1336,14 @@ static int mt_input_mapped(struct hid_device *hdev, struct hid_input *hi,
+ 	struct mt_device *td = hid_get_drvdata(hdev);
+ 	struct mt_report_data *rdata;
+ 
++	if (field->application == HID_DG_TOUCHSCREEN ||
++			field->application == HID_DG_TOUCHPAD) {
++		if (usage->type == EV_KEY || usage->type == EV_ABS)
++			set_bit(usage->type, hi->input->evbit);
++
++		return -1;
++	}
++
+ 	rdata = mt_find_report_data(td, field->report);
+ 	if (rdata && rdata->is_mt_collection) {
+ 		/* We own these mappings, tell hid-input to ignore them */
+@@ -1677,6 +1692,7 @@ static int mt_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 	td->hdev = hdev;
+ 	td->mtclass = *mtclass;
+ 	td->inputmode_value = MT_INPUTMODE_TOUCHSCREEN;
++	cc_seen = 0;
+ 	hid_set_drvdata(hdev, td);
+ 
+ 	INIT_LIST_HEAD(&td->applications);
+diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
+index af22bbc3d00c..eb1eb0d58c32 100644
+--- a/drivers/misc/Makefile
++++ b/drivers/misc/Makefile
+@@ -44,6 +44,7 @@ obj-y				+= lis3lv02d/
+ obj-$(CONFIG_USB_SWITCH_FSA9480) += fsa9480.o
+ obj-$(CONFIG_ALTERA_STAPL)	+=altera-stapl/
+ obj-$(CONFIG_INTEL_MEI)		+= mei/
++obj-$(CONFIG_INTEL_IPTS)	+= ipts/
+ obj-$(CONFIG_VMWARE_VMCI)	+= vmw_vmci/
+ obj-$(CONFIG_LATTICE_ECP3_CONFIG)	+= lattice-ecp3-config.o
+ obj-$(CONFIG_SRAM)		+= sram.o
+ 

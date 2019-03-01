@@ -16,7 +16,6 @@ Linux running on the Thinkpad X1 Tablet 3rd generation.
 * Power button
 * SD card reader
 * Front camera
-* Suspend (not S3)
 * Hibernate
 * Sensors
 * Battery readings
@@ -25,10 +24,11 @@ Linux running on the Thinkpad X1 Tablet 3rd generation.
 
 * Volume buttons (Updating BIOS)
 * S3 sleep (Patching DSDT)
-* Trackpoint and trackpad buttons (Patching and compling kernel)
+* Trackpoint and trackpad buttons (Patching kernel)
 
 #### Not working
 
+* Microphone
 * Back camera
 * Fingerprint reader
 * FnLock key
@@ -40,8 +40,6 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
 ### Enable S3 sleep:
 
 * Thanks to mr-sour for his [gist](https://gist.github.com/mr-sour/e6e4f462dff2334aad84b6edd5181c09)
-
-#### Patch the DSDT:
 
 0. Reboot, and enter your BIOS. Go to Config, then Thunderbolt (TM) 3, and set Thunerbolt BIOS Assist Mode to "Enabled".
 1. Install iasl, patch and git:
@@ -82,10 +80,6 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
 
 ### Fix the trackpoint and trackpad buttons:
 
-* Thanks to jakeday for the patch
-
-#### Patch and compile the kernel from source:
-
 0. Install the required packages for compiling the kernel:
   * Fedora/REHL
   ```
@@ -106,13 +100,13 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
   ```
   cd linux-stable
   ```
-3. Checkout the current supported version of the kernel:
+3. Checkout the version of the kernel you wish to target (replacing "x.y" with your target version):
   ```
-  git checkout v4.19.18
+  git checkout v4.x.y
   ```
 4. Apply the kernel patch:
   ```
-  patch -p1 < ../ipts.patch
+  patch -p1 < ../trackpoint.patch
   ```
 5. Obtain the current kernel configuration of your distribution:
   ```
@@ -122,7 +116,6 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
   ```
   make -j `getconf _NPROCESSORS_ONLN` bzImage; make -j `getconf _NPROCESSORS_ONLN` modules
   ```
-  * Type "m" when prompted "Intel Precise Touch & Stylus (INTEL_IPTS) [N/m/y/?] (NEW)"
 7. Install the kernel and headers:
   ```
   sudo make -j `getconf _NPROCESSORS_ONLN` modules_install
@@ -144,4 +137,4 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
 
 ### Notes
 
-* The custom acpi loader does not currently support dual boot with Windows, so if you installed a kernel using this guide and want to boot on Windows you will have to disable it first, and update the grub before restarting.
+* The custom acpi loader does not currently support dual boot with Windows, so if you installed a kernel using this guide and want to boot on Windows you will have to disable the custom acpi loader first, and update the grub before rebooting.
