@@ -104,7 +104,7 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
   ```
 2. Go into the linux-stable directory:
   ```
-  cd ~/linux-stable
+  cd linux-stable
   ```
 3. Checkout the current supported version of the kernel:
   ```
