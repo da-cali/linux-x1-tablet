@@ -80,6 +80,14 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
 
 ### Fix the trackpoint and trackpad buttons:
 
+##### Either
+
+* install [jakeday's linux-surface kernel](https://github.com/jakeday/linux-surface). (NOTE: Do not run the setup script. Only install the kernel packages.)
+
+#### Or
+
+* compile your own kernel from source:
+
 0. Install the required packages for compiling the kernel:
   * Fedora/REHL
   ```
