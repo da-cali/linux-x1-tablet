@@ -8,6 +8,7 @@ Linux running on the Thinkpad X1 Tablet 3rd generation.
 * Docking/undocking tablet and keyboard
 * 2D/3D acceleration
 * Trackpad
+* Trackpoint and trackpad buttons (NOTE: Only with kernel 5.1 or newer.)
 * Touchscreen
 * Pen
 * WiFi
@@ -20,11 +21,11 @@ Linux running on the Thinkpad X1 Tablet 3rd generation.
 * Sensors
 * Battery readings
 
-#### Working with tweaks (see bellow)
+#### Working with tweaks (see instructions bellow)
 
 * Volume buttons (Updating BIOS)
 * S3 sleep (Patching DSDT)
-* Trackpoint and trackpad buttons (Patching kernel)
+* Trackpoint and trackpad buttons (Patching kernel) NOTE: Only necessary if you are running a kernel older than version 5.1.
 
 #### Not working
 
