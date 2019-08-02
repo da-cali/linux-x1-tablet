@@ -75,7 +75,7 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
   ```
   sudo update-grub
   ```
-  NOTE: If the "Found custom ACPI table: /boot/dsdt.aml" line does not show up, update grub again.
+  * NOTE: If the "Found custom ACPI table: /boot/dsdt.aml" line does not show up, update grub again.
 
 7. Reboot the machine and confirm that the patch is working by entering "cat /sys/power/mem_sleep" in the command line and getting back "s2idle [deep]" (with the brackets around "deep").
 
