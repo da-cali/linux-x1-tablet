@@ -52,7 +52,7 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
   ```
   sudo apt install iasl patch git
   ```
-2. Clone repository:
+2. Clone this repository:
   ```
   git clone --depth 1 https://github.com/da-cali/linux-x1-tablet
   ```
@@ -75,7 +75,7 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
   ```
   sudo update-grub
   ```
-  * If the "Found custom ACPI table: /boot/dsdt.aml" line does not show up, update grub again.
+  NOTE: If the "Found custom ACPI table: /boot/dsdt.aml" line does not show up, update grub again.
 
 7. Reboot the machine and confirm that the patch is working by entering "cat /sys/power/mem_sleep" in the command line and getting back "s2idle [deep]" (with the brackets around "deep").
 
@@ -105,9 +105,9 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
   ```
   cd linux-stable
   ```
-3. Checkout the version of the kernel you wish to target (replacing "x.y" with your target version):
+3. Checkout the version of the kernel you wish to target (replacing "x.y.z" with your target version, for example: "git checkout v5.0.10"):
   ```
-  git checkout v4.x.y
+  git checkout vx.y.z
   ```
 4. Apply the kernel patch:
   ```
@@ -138,7 +138,6 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
   sudo update-grub
   ```
 9. Reboot from the new kernel.
-
 
 ### Notes
 
