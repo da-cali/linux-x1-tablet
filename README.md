@@ -94,9 +94,6 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
   ```
 3. Save changes and restart.
 
-#### Either install [jakeday's linux-surface kernel](https://github.com/jakeday/linux-surface). (NOTE: Do not run the setup script. Only install the kernel packages.)
-
-#### Or compile your own kernel from source:
 
 ### Fix the trackpoint and trackpad buttons:
 
