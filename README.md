@@ -25,6 +25,7 @@ Linux running on the Thinkpad X1 Tablet 3rd generation.
 
 * Volume buttons (Updating BIOS)
 * S3 sleep (Patching DSDT)
+* Suspend on lid close
 * Trackpoint and trackpad buttons (Patching kernel) NOTE: Only necessary if you are running a kernel older than version 5.1.
 
 #### Not working
@@ -78,6 +79,24 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
   * NOTE: If the "Found custom ACPI table: /boot/dsdt.aml" line does not show up, update grub again.
 
 7. Reboot the machine and confirm that the patch is working by entering "cat /sys/power/mem_sleep" in the command line and getting back "s2idle [deep]" (with the brackets around "deep").
+
+### Enable suspend on lid close:
+
+1. Open logind.conf:
+  ```
+  sudo nano /etc/systemd/logind.conf
+  ```
+2. Uncomment the following lines:
+  ```
+  HandleSuspendKey=suspend
+  HandleLidSwitch=suspend
+  HandleLidSwitchDocked=suspend
+  ```
+3. Save changes and restart.
+
+#### Either install [jakeday's linux-surface kernel](https://github.com/jakeday/linux-surface). (NOTE: Do not run the setup script. Only install the kernel packages.)
+
+#### Or compile your own kernel from source:
 
 ### Fix the trackpoint and trackpad buttons:
 
