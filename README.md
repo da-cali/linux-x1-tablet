@@ -158,3 +158,5 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
 ### Notes
 
 * The custom acpi loader does not currently support dual boot with Windows, so if you installed a kernel using this guide and want to boot on Windows you will have to disable the custom acpi loader first, and update the grub before rebooting.
+* If you experience random freezes, try adding the kernel parameter "i915.enable_psr=0" to /etc/default/grub. (So that it looks like this: GRUB_CMDLINE_LINUX="quiet i915.enable_psr=0 mem_sleep_default=deep".)
+
