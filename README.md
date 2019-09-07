@@ -160,3 +160,21 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
 * The custom acpi loader does not currently support dual boot with Windows, so if you installed a kernel using this guide and want to boot on Windows you will have to disable the custom acpi loader first, and update the grub before rebooting.
 * If you experience random freezes, try adding the kernel parameter "i915.enable_psr=0" to /etc/default/grub. (So that it looks like this: GRUB_CMDLINE_LINUX="quiet i915.enable_psr=0 mem_sleep_default=deep".)
 
+### Not any sound in output speakers or headphones
+
+In some situations, the soundcard is detected but the speakers are shown as "Unavailable". You can see an error message during Kernel boot up : 
+```
+hda_intel: azx_get_response timeout, switching to single_cmd mode:
+      last cmd=0x12345678
+```
+
+This happens because the BIOS reports the available codec slots [wrongly](https://www.kernel.org/doc/html/v4.10/sound/hd-audio/notes.html). 
+
+1. Edit /etc/modprobe.d/alsa-base.conf and add the following instructions at the end of the file.
+```
+options snd-hda-intel single_cmd=1
+options snd-hda-intel probe_mask=1
+options snd-hda-intel model=basic
+```
+
+Reboot to apply the changes.
