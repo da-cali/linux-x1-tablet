@@ -16,7 +16,7 @@
 -    One
      Name (SS4, One)
 -    One
-     OperationRegion (GNVS, SystemMemory, 0x4FF33000, 0x0769)
+     OperationRegion (GNVS, SystemMemory, 0x4FF33000, 0x0789)
      Field (GNVS, AnyAcc, Lock, Preserve)
      {
 @@ -27580,6 +27578,13 @@
