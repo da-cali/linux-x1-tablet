@@ -33,6 +33,8 @@ Linux running on the Thinkpad X1 Tablet 3rd generation.
 * Fingerprint reader
 * FnLock key
 
+PLEASE READ THE NOTES AFTER USING THIS GUIDE
+
 ### Enable S3 sleep and fix the volume buttons:
 
 * Thanks to mr-sour for their [gist.](https://gist.github.com/mr-sour/e6e4f462dff2334aad84b6edd5181c09)
@@ -152,6 +154,7 @@ Linux running on the Thinkpad X1 Tablet 3rd generation.
 
 ### Notes
 
-* The custom acpi loader does not currently support dual boot with Windows, so if you installed a kernel using this guide and want to boot on Windows you will have to disable the custom acpi loader first, and update the grub before rebooting.
+* The custom acpi loader does not currently support dual boot with Windows, so if you installed a kernel using this guide and want to boot on Windows you will have to disable the custom acpi loader first, and update the grub before rebooting. To uninstall the custom acpi loader delete both /etc/grub.d/01_acpi and /boot/dsdt.aml, update grub and restart.
+* Wifi power saving mode can make the wifi unstable. You can check the power management status of your wifi with the "iwconfig" command, and desactivate wifi power save with TLP.
 * Tested in Ubuntu 20.04 with BIOS v1.36.
 
