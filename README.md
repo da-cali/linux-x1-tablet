@@ -8,7 +8,6 @@ Linux running on the Thinkpad X1 Tablet 3rd generation.
 * Docking/undocking tablet and keyboard
 * 2D/3D acceleration
 * Trackpad
-* Trackpoint and trackpad buttons (NOTE: Only with kernel 5.1 or newer.)
 * Touchscreen
 * Pen
 * WiFi
@@ -23,10 +22,9 @@ Linux running on the Thinkpad X1 Tablet 3rd generation.
 
 #### Working with tweaks (see instructions bellow)
 
-* Volume buttons (Updating BIOS)
-* S3 sleep (Patching DSDT)
+* S3 sleep and volume buttons (Patching DSDT)
 * Suspend on lid close
-* Trackpoint and trackpad buttons (Patching kernel) NOTE: Only necessary if you are running a kernel older than version 5.1.
+* Trackpoint and trackpad buttons (Patching kernel)
 
 #### Not working
 
@@ -35,15 +33,12 @@ Linux running on the Thinkpad X1 Tablet 3rd generation.
 * Fingerprint reader
 * FnLock key
 
-### Fix the volume buttons:
+### Enable S3 sleep and fix the volume buttons:
 
-Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary to make S3 sleep work.
+* Thanks to mr-sour for their [gist.](https://gist.github.com/mr-sour/e6e4f462dff2334aad84b6edd5181c09)
+* Thanks to Lunm0us for their [work on the patch.](https://github.com/Lunm0us/linux-tp1gen3)
 
-### Enable S3 sleep:
-
-* Thanks to mr-sour for his [gist](https://gist.github.com/mr-sour/e6e4f462dff2334aad84b6edd5181c09)
-
-0. Reboot, and enter your BIOS. Go to Config, then Thunderbolt (TM) 3, and set Thunerbolt BIOS Assist Mode to "Enabled".
+0. Upgrade your BIOS, reboot, and enter it. Go to Config, then Thunderbolt (TM) 3, and set Thunerbolt BIOS Assist Mode to "Enabled".
 1. Install iasl, patch and git:
   * Fedora/REHL:
   ```
@@ -97,9 +92,9 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
 
 ### Fix the trackpoint and trackpad buttons:
 
-#### Either install [jakeday's linux-surface kernel](https://github.com/jakeday/linux-surface). (NOTE: Do not run the setup script. Only install the kernel packages.)
+#### * Either install [jakeday's linux-surface kernel](https://github.com/jakeday/linux-surface). (NOTE: Do not run the setup script. Only install the kernel packages.)
 
-#### Or compile your own kernel from source:
+#### * Or compile your own kernel from source:
 
 0. Install the required packages for compiling the kernel:
   * Fedora/REHL
@@ -158,5 +153,5 @@ Upgrade your BIOS. Doing so fixes the volume buttons and it is possibly necesary
 ### Notes
 
 * The custom acpi loader does not currently support dual boot with Windows, so if you installed a kernel using this guide and want to boot on Windows you will have to disable the custom acpi loader first, and update the grub before rebooting.
-* If you experience random freezes, try adding the kernel parameter "i915.enable_psr=0" to /etc/default/grub. (So that it looks like this: GRUB_CMDLINE_LINUX="quiet i915.enable_psr=0 mem_sleep_default=deep".)
+* Tested in Ubuntu 20.04 with BIOS v1.36.
 

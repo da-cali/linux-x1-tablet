@@ -1,5 +1,5 @@
---- dsdt.dsl~   2018-04-26 09:35:29.501055509 -0600
-+++ dsdt.dsl    2018-04-26 09:36:23.769729028 -0600
+--- a/dsdt.dsl
++++ b/dsdt.dsl
 @@ -18,7 +18,7 @@
   *     Compiler ID      "INTL"
   *     Compiler Version 0x20160527 (538314023)
@@ -9,7 +9,7 @@
  {
      External (_PR_.BGIA, UnknownObj)
      External (_PR_.BGMA, UnknownObj)
-@@ -231,9 +231,7 @@
+@@ -232,9 +232,7 @@
      Name (SS1, 0x00)
      Name (SS2, 0x00)
      Name (SS3, One)
@@ -19,8 +19,18 @@
      OperationRegion (GNVS, SystemMemory, 0x4FF34000, 0x0789)
      Field (GNVS, AnyAcc, Lock, Preserve)
      {
-@@ -27580,6 +27578,13 @@
-         0x00,
+@@ -13798,8 +13796,7 @@
+                     If ((DerefOf (Arg0 [0x00]) == 0x01))
+                     {
+                         ADBG (Concatenate ("POFF GPIO=", ToHexString (DerefOf (Arg0 [0x02]))))
+-                        \_SB.SGOV (DerefOf (Arg0 [0x02]), (DerefOf (Arg0 [0x03]) ^ 
+-                            0x01))
++                        \_SB.SGOV (DerefOf (Arg0 [0x02]), (DerefOf (Arg0 [0x03]) ^ 0x01))
+                     }
+ 
+                     If ((DerefOf (Arg0 [0x00]) == 0x02))
+@@ -30797,6 +30794,13 @@
+         0x00, 
          0x00
      })
 +    Name (\_S3, Package (0x04)  // _S3_: S3 System State
@@ -32,4 +42,16 @@
 +    })
      Name (\_S4, Package (0x04)  // _S4_: S4 System State
      {
-         0x06,
+         0x06, 
+@@ -37011,6 +37015,11 @@
+                 {
+                     Return (0x0D)
+                 }
++
++                Method (HEBC, 0, Serialized)
++                {
++                    Return (0x340000)
++                }
+             }
+         }
+ 
